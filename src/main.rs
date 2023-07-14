@@ -14,13 +14,16 @@ const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_settin
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct Config { 
-    watcher_path: String, 
-    backup_path: String, 
-    logfile_path: String, 
-    compression_level: u32, 
-    encryption_password: String, 
-    duration_interval: u64, 
-    ignore_list: Vec<String>, 
+    resistance_tbl_path: String, 
+    specific_heat_tbl_path: String,
+    heat_transfer_tbl_path: String,
+    current_tbl_path: String,
+    surface_area: f64,
+    weight: f64,
+    start_sample_temperature: f64,
+    enviroment_temperature: f64,
+    pulse_duration: f64,
+    num_of_iterations: u64,
     tbl_test: Vec<SpecHeat>,
 }
   

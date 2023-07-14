@@ -1,0 +1,5 @@
+resistance_tbl = [ 
+{index=11.11, value=22.22},
+{index=66.11, value=99.22},
+{index=55.1, value=88.2}
+]

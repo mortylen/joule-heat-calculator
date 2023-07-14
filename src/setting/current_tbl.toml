@@ -1,0 +1,5 @@
+current_tbl = [ 
+{index=11.11, value=66.22},
+{index=22.11, value=77.22},
+{index=33.1, value=88.2}
+]

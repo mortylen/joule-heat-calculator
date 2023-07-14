@@ -1,0 +1,5 @@
+heat_transfer_tbl = [ 
+{index=11.44, value=22.44},
+{index=66.44, value=99.44},
+{index=55.44, value=88.2444}
+]
