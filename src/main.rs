@@ -11,7 +11,8 @@ use chrono::Utc;
   
 const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
   
-#[derive(Deserialize)] 
+#[derive(Deserialize)]
+#[derive(Debug)]
 struct Config { 
     watcher_path: String, 
     backup_path: String, 
@@ -39,6 +40,10 @@ struct SpecHeat {
 }
 
 fn main() {
+    let config = Config::build(&read_config_file(&CONFIG_FILE_NAME_PATH));
+
+    println!("{:#?}", config);
+    
     let mut tbl_spec_heat: Vec<SpecHeat> = Vec::new();
     
     let spec_heat_row01 = SpecHeat {
@@ -74,6 +79,16 @@ fn main() {
     println!("{:#?}", get_spec_heat_from_vec(&tbl_spec_heat, 0.9));
     //get_spec_heat_from_vec(&tbl_spec_heat, 6.0);
 }
+
+fn read_config_file(config_path: &str) -> String { 
+     let file_content = match fs::read_to_string(&config_path) { 
+         Ok(file_content) => file_content, 
+         Err(error) => panic!("Read config file error. Invalid configuration file: '{}'. {}", &CONFIG_FILE_NAME_PATH, error), 
+     }; 
+  
+     file_content 
+}
+
 
 fn get_spec_heat_from_vec(tbl_data: &Vec<SpecHeat>, temperature: f64) -> Option<f64> {
     let (down_temp, down_heat) = match tbl_data.iter().find(|&x| x.temperature <= temperature) {
