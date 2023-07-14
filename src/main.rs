@@ -1,13 +1,13 @@
-use std::sync::mpsc::channel; 
-use std::time::Duration; 
-use std::path::{PathBuf, Path}; 
+//use std::sync::mpsc::channel; 
+//use std::time::Duration; 
+//use std::path::{PathBuf, Path}; 
 use std::fs; 
-use std::fs::{File, OpenOptions}; 
-use std::ffi::OsStr; 
-use std::io::prelude::*; 
+//use std::fs::{File, OpenOptions}; 
+//use std::ffi::OsStr; 
+//use std::io::prelude::*; 
 use serde::Deserialize; 
 use toml; 
-use chrono::Utc; 
+//use chrono::Utc; 
   
 const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
   
@@ -21,7 +21,8 @@ struct Config {
     encryption_password: String, 
     duration_interval: u64, 
     ignore_list: Vec<String>, 
-} 
+    tbl_test: Vec<SpecHeat>,
+}
   
 impl Config { 
     fn build(file_content: &String) -> Config { 
@@ -33,6 +34,7 @@ impl Config {
     } 
 }
 
+#[derive(Deserialize)]
 #[derive(Debug)]
 struct SpecHeat {
     temperature: f64,

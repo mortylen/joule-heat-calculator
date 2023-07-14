@@ -18,3 +18,10 @@
   
  # Set ignore list, this content will be ignored for backup. 
  ignore_list = ["aaa.txt", "daco.bar"]
+
+ # test
+tbl_test = [ 
+{temperature=11.11, specific_heat=22.22}, {temperature=66.11, specific_heat=99.22},
+{temperature=55.1, specific_heat=88.2}
+]
+ 
