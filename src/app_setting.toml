@@ -1,0 +1,20 @@
+# Set watcher folder path 
+ watcher_path = "/home/runner/Filesystemwatcherrust/src/test/" 
+  
+ # Set backup folder path 
+ backup_path = "/home/runner/Filesystemwatcherrust/src/back/" 
+  
+ # Set log file path 
+ logfile_path = "/home/runner/Filesystemwatcherrust/src/back/log.txt" 
+  
+ # Set compression level 0-NonCompression 
+ compression_level = 0 
+  
+ # Set encryption password or comment this line for non encription 
+ encryption_password = "pass" 
+  
+ # Set duration interval in [ms] 
+ duration_interval = 100 
+  
+ # Set ignore list, this content will be ignored for backup. 
+ ignore_list = ["aaa.txt", "daco.bar"]

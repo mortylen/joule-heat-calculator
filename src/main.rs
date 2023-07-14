@@ -1,3 +1,37 @@
+use std::sync::mpsc::channel; 
+use std::time::Duration; 
+use std::path::{PathBuf, Path}; 
+use std::fs; 
+use std::fs::{File, OpenOptions}; 
+use std::ffi::OsStr; 
+use std::io::prelude::*; 
+use serde::Deserialize; 
+use toml; 
+use chrono::Utc; 
+  
+const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
+  
+#[derive(Deserialize)] 
+struct Config { 
+    watcher_path: String, 
+    backup_path: String, 
+    logfile_path: String, 
+    compression_level: u32, 
+    encryption_password: String, 
+    duration_interval: u64, 
+    ignore_list: Vec<String>, 
+} 
+  
+impl Config { 
+    fn build(file_content: &String) -> Config { 
+        let cfg: Config = match toml::from_str(&file_content) { 
+            Ok(cfg) => cfg, 
+            Err(error) => panic!("Problem parsing config file: '{}'. {}", &CONFIG_FILE_NAME_PATH, error), 
+        }; 
+        cfg 
+    } 
+}
+
 #[derive(Debug)]
 struct SpecHeat {
     temperature: f64,
