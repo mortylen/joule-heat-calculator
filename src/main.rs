@@ -10,7 +10,22 @@ use toml;
 //use chrono::Utc; 
   
 const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
-  
+
+//TODO is not table, but ROW
+#[derive(Deserialize)]
+#[derive(Debug)]
+struct TblIndexValue {
+    index: f64,
+    value: f64,
+}
+
+//TODO TblCurrent prepisat na vseobecne + pridat get_down a get_up
+#[derive(Deserialize)]
+#[derive(Debug)]
+struct TblCurrent {
+    current_tbl: Vec<TblIndexValue>,
+}
+
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct Config { 
@@ -37,6 +52,15 @@ impl Config {
     } 
 }
 
+fn fill_tbl_index_value(file_content: &String) -> TblCurrent {
+    let tbl: TblCurrent = match toml::from_str(&file_content) { 
+            Ok(tbl) => tbl, 
+            Err(error) => panic!("Problem parsing config file: {}", error), 
+        }; 
+        tbl 
+}
+
+//TODO: delete struct SpecHeat
 #[derive(Deserialize)]
 #[derive(Debug)]
 struct SpecHeat {
@@ -47,6 +71,11 @@ struct SpecHeat {
 fn main() {
     let config = Config::build(&read_config_file(&CONFIG_FILE_NAME_PATH));
 
+
+    
+   let tbl_current = fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
+
+    println!("{:#?}", tbl_current);
     println!("{:#?}", config);
     
     let mut tbl_spec_heat: Vec<SpecHeat> = Vec::new();
@@ -88,10 +117,26 @@ fn main() {
 fn read_config_file(config_path: &str) -> String { 
      let file_content = match fs::read_to_string(&config_path) { 
          Ok(file_content) => file_content, 
-         Err(error) => panic!("Read config file error. Invalid configuration file: '{}'. {}", &CONFIG_FILE_NAME_PATH, error), 
+         Err(error) => panic!("Read config file error. Invalid configuration file: '{}'. {}", &config_path, error), 
      }; 
   
      file_content 
+}
+
+fn get_down_index_value(tbl_data: &Vec<TblIndexValue>, index: f64) -> (f64, f64) {
+    let (down_index, down_value) = match tbl_data.iter().find(|&x| x.index <= index) {
+        Some(value) => (value.index, value.value),
+        None => (tbl_data.first().unwrap().index, tbl_data.first().unwrap().value),
+    };
+    (down_index, down_value)
+}
+
+fn get_up_index_value(tbl_data: &Vec<TblIndexValue>, index: f64) -> (f64, f64) {
+    let (up_index, up_value) = match tbl_data.iter().find(|&x| x.index >= index) {
+        Some(value) => (value.index, value.value),
+        None => (tbl_data.last().unwrap().index, tbl_data.last().unwrap().value),
+    };
+    (up_index, up_value)
 }
 
 
