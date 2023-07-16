@@ -11,19 +11,45 @@ use toml;
   
 const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
 
-//TODO is not table, but ROW
+
 #[derive(Deserialize)]
 #[derive(Debug)]
-struct TblIndexValue {
+struct RowIndexValue {
     index: f64,
     value: f64,
 }
 
-//TODO TblCurrent prepisat na vseobecne + pridat get_down a get_up
+//TODO TblCurrent prepisat na vseobecne + pridat get_down a get_up a fill_table
 #[derive(Deserialize)]
 #[derive(Debug)]
-struct TblCurrent {
-    current_tbl: Vec<TblIndexValue>,
+struct TblIndexValueData {
+    index_value_data: Vec<RowIndexValue>,
+}
+
+impl TblIndexValueData { 
+    fn fill_tbl_index_value(file_content: &String) -> TblIndexValueData {
+        let tbl_data: TblIndexValueData = match toml::from_str(&file_content) { 
+            Ok(tbl_data) => tbl_data, 
+            Err(error) => panic!("Problem parsing config file: {}", error), 
+        }; 
+        tbl_data 
+    }
+
+    fn get_down_index_value(&self, index: f64) -> (f64, f64) {
+        let (down_index, down_value) = match self.index_value_data.iter().find(|&x| x.index <= index) {
+            Some(value) => (value.index, value.value),
+            None => (self.index_value_data.first().unwrap().index, self.index_value_data.first().unwrap().value),
+        };
+    (down_index, down_value)
+    }
+
+    fn get_up_index_value(&self, index: f64) -> (f64, f64) {
+        let (up_index, up_value) = match self.index_value_data.iter().find(|&x| x.index >= index) {
+            Some(value) => (value.index, value.value),
+            None => (self.index_value_data.last().unwrap().index, self.index_value_data.last().unwrap().value),
+        };
+    (up_index, up_value)
+    }
 }
 
 #[derive(Deserialize)]
@@ -52,13 +78,13 @@ impl Config {
     } 
 }
 
-fn fill_tbl_index_value(file_content: &String) -> TblCurrent {
-    let tbl: TblCurrent = match toml::from_str(&file_content) { 
-            Ok(tbl) => tbl, 
-            Err(error) => panic!("Problem parsing config file: {}", error), 
-        }; 
-        tbl 
-}
+//fn fill_tbl_index_value(file_content: &String) -> TblIndexValueData {
+//    let tbl_data: TblIndexValueData = match toml::from_str(&file_content) { 
+//            Ok(tbl_data) => tbl_data, 
+//            Err(error) => panic!("Problem parsing config file: {}", error), 
+//        }; 
+//        tbl_data 
+//}
 
 //TODO: delete struct SpecHeat
 #[derive(Deserialize)]
@@ -73,8 +99,11 @@ fn main() {
 
 
     
-   let tbl_current = fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
+   let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
 
+    //let tbl_current =  fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
+    println!("{:#?}", tbl_current.get_down_index_value(60.0).0);
+    println!("{:#?}", tbl_current.get_down_index_value(60.0).1);
     println!("{:#?}", tbl_current);
     println!("{:#?}", config);
     
@@ -123,21 +152,21 @@ fn read_config_file(config_path: &str) -> String {
      file_content 
 }
 
-fn get_down_index_value(tbl_data: &Vec<TblIndexValue>, index: f64) -> (f64, f64) {
-    let (down_index, down_value) = match tbl_data.iter().find(|&x| x.index <= index) {
-        Some(value) => (value.index, value.value),
-        None => (tbl_data.first().unwrap().index, tbl_data.first().unwrap().value),
-    };
-    (down_index, down_value)
-}
+//fn get_down_index_value(tbl_data: &Vec<RowIndexValue>, index: f64) -> (f64, f64) {
+//    let (down_index, down_value) = match tbl_data.iter().find(|&x| x.index <= index) {
+//        Some(value) => (value.index, value.value),
+//        None => (tbl_data.first().unwrap().index, tbl_data.first().unwrap().value),
+//    };
+//    (down_index, down_value)
+//}
 
-fn get_up_index_value(tbl_data: &Vec<TblIndexValue>, index: f64) -> (f64, f64) {
-    let (up_index, up_value) = match tbl_data.iter().find(|&x| x.index >= index) {
-        Some(value) => (value.index, value.value),
-        None => (tbl_data.last().unwrap().index, tbl_data.last().unwrap().value),
-    };
-    (up_index, up_value)
-}
+//fn get_up_index_value(tbl_data: &Vec<RowIndexValue>, index: f64) -> (f64, f64) {
+//    let (up_index, up_value) = match tbl_data.iter().find(|&x| x.index >= index) {
+//        Some(value) => (value.index, value.value),
+//        None => (tbl_data.last().unwrap().index, tbl_data.last().unwrap().value),
+//    };
+//    (up_index, up_value)
+//}
 
 
 fn get_spec_heat_from_vec(tbl_data: &Vec<SpecHeat>, temperature: f64) -> Option<f64> {

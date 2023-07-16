@@ -1,4 +1,4 @@
-specific_heat_tbl = [ 
+index_value_data = [ 
 {index=11.3, value=22.3},
 {index=66.3, value=99.3},
 {index=55.3, value=88.3}
