@@ -11,22 +11,22 @@ heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer
 current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
 
 # Set sample surface area [mm^2]
-surface_area = 160.0
+surface_area = 70.591586
 
 # Set sample weight [g]
-weight = 10.0
+weight = 0.17037
 
 # Set start sample temperature [K]
-start_sample_temperature = 20.0
+start_sample_temperature = 77.0
 
 # Set enviroment temperature [K]
-enviroment_temperature = 20.0
+enviroment_temperature = 77.0
 
 # Set pulse duration [ms]
-pulse_duration = 15
+pulse_duration = 1000
 
 # Set number of iterations
-num_of_iterations = 10
+num_of_iterations = 1000
 
 # Set export directory path
 export_path = "/home/runner/joule-heat-rust/src/"
