@@ -26,6 +26,7 @@ enviroment_temperature = 20.0
 pulse_duration = 15
 
 # Set number of iterations
-num_of_iterations = 1000
+num_of_iterations = 10
 
- 
+# Set export directory path
+export_path = "/home/runner/joule-heat-rust/src/"
