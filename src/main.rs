@@ -104,6 +104,8 @@ fn main() {
     //println!("{:#?}", tbl_current.get_down_index_value(60.0).1);
     println!("{:#?}", tbl_current);
     //println!("{:#?}", config);
+
+    get_calculated_data(&config);
 }
 
 fn read_config_file(config_path: &str) -> String { 
@@ -113,4 +115,32 @@ fn read_config_file(config_path: &str) -> String {
      }; 
   
      file_content 
+}
+
+fn get_calculated_data(config: &Config) {
+    let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
+    let tbl_resistance = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.resistance_tbl_path));
+    let tbl_specific_heat = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.specific_heat_tbl_path));
+    let tbl_heat_transfer = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.heat_transfer_tbl_path));
+
+    let A = &config.surface_area / 1000000.0;    //mm^2 to m^2
+    let m = &config.weight / 1000.0;             //g to kg
+    let Tp = &config.enviroment_temperature;
+    let t = &config.pulse_duration / (config.num_of_iterations as f64);
+    
+    let mut temperature = config.start_sample_temperature;
+    let mut dT: f64;
+    let mut heating: f64;
+    let mut cooling: f64;
+    let mut mc: f64;        //= m * c
+    
+    for i in 0..config.num_of_iterations {
+        mc = m * tbl_specific_heat.calculate_value_by_index(temperature);
+        heating = ((f64::powf(tbl_current.calculate_value_by_index(temperature), 2.0) * tbl_resistance.calculate_value_by_index(temperature)) / mc) * t;
+        cooling = ((A * tbl_heat_transfer.calculate_value_by_index(temperature) * (temperature - Tp)) / mc) * t;
+        dT = heating - cooling;
+        temperature += dT;
+            
+        println!("time: {}; temperature: {}; heating: {}; cooling: {}", (t * i as f64), temperature, heating, cooling);
+    }
 }
