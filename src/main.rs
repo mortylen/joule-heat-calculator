@@ -123,22 +123,30 @@ fn get_calculated_data(config: &Config) {
     let tbl_specific_heat = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.specific_heat_tbl_path));
     let tbl_heat_transfer = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.heat_transfer_tbl_path));
 
+    let e = 2.71828182845904523536;
     let A = &config.surface_area / 1000000.0;    //mm^2 to m^2
     let m = &config.weight / 1000.0;             //g to kg
     let Tp = &config.enviroment_temperature;
-    let t = &config.pulse_duration / (config.num_of_iterations as f64);
+    let dTime = &config.pulse_duration / (config.num_of_iterations as f64) / 1000.0;
     
     let mut temperature = config.start_sample_temperature;
     let mut dT: f64;
     let mut heating: f64;
     let mut cooling: f64;
+    let mut tau: f64;
     let mut mc: f64;        //= m * c
+    let mut Ah: f64;        //= A * h
+    let mut t: f64;
     
     for i in 0..config.num_of_iterations {
+        t = dTime * i as f64;
         mc = m * tbl_specific_heat.calculate_value_by_index(temperature);
-        heating = ((f64::powf(tbl_current.calculate_value_by_index(temperature), 2.0) * tbl_resistance.calculate_value_by_index(temperature)) / mc) * t;
-        cooling = ((A * tbl_heat_transfer.calculate_value_by_index(temperature) * (temperature - Tp)) / mc) * t;
-        dT = heating - cooling;
+        Ah = A * tbl_heat_transfer.calculate_value_by_index(temperature);
+        heating = ((f64::powf(tbl_current.calculate_value_by_index(temperature), 2.0) * tbl_resistance.calculate_value_by_index(temperature)) / mc) * dTime;
+        cooling = ((Ah * (temperature - Tp)) / mc) * dTime;
+        tau = 1.0 - f64::powf(e, -((Ah * t) / mc));
+        
+        dT = heating - (cooling * tau);
         temperature += dT;
             
         println!("time: {}; temperature: {}; heating: {}; cooling: {}", (t * i as f64), temperature, heating, cooling);
