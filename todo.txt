@@ -1,0 +1,4 @@
+- Load csv config tables
+- Split calculation to fn
+- Add user menu, edit settings
+- Export file, filename + timestamp
