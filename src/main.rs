@@ -5,9 +5,11 @@ use std::fs;
 //use std::fs::{File, OpenOptions}; 
 //use std::ffi::OsStr; 
 //use std::io::prelude::*; 
+use std::io;
 use serde::Deserialize; 
 use toml; 
-//use chrono::Utc; 
+use csv::{Reader, Writer};
+use chrono::Utc; 
   
 const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
 
@@ -18,6 +20,7 @@ struct Config {
     specific_heat_tbl_path: String,
     heat_transfer_tbl_path: String,
     current_tbl_path: String,
+    export_path: String,
     surface_area: f64,
     weight: f64,
     start_sample_temperature: f64,
@@ -127,7 +130,7 @@ fn get_calculated_data(config: &Config) {
     let A = &config.surface_area / 1000000.0;    //mm^2 to m^2
     let m = &config.weight / 1000.0;             //g to kg
     let Tp = &config.enviroment_temperature;
-    let dTime = &config.pulse_duration / (config.num_of_iterations as f64) / 1000.0;
+    let dTime = (&config.pulse_duration / 1000.0) / (config.num_of_iterations as f64);
     
     let mut temperature = config.start_sample_temperature;
     let mut dT: f64;
@@ -137,6 +140,17 @@ fn get_calculated_data(config: &Config) {
     let mut mc: f64;        //= m * c
     let mut Ah: f64;        //= A * h
     let mut t: f64;
+
+    //let datetime_now: String = Utc::now().to_string();
+    let datetime_now: String = Utc::now().format("_%Y%m%d-%H%M%S").to_string();
+    let writer_result = Writer::from_path(&config.export_path.replace(".csv",  &(datetime_now + ".csv")));
+    let mut writer = match writer_result {
+        Ok(writer) => writer,
+        Err(err) => return Err(Box::new(err)).unwrap(),
+    };
+
+    writer.write_record(&["Time", "Temperature", "Heating", "Cooling"]);
+   
     
     for i in 0..config.num_of_iterations {
         t = dTime * i as f64;
@@ -149,6 +163,8 @@ fn get_calculated_data(config: &Config) {
         dT = heating - (cooling * tau);
         temperature += dT;
             
-        println!("time: {}; temperature: {}; heating: {}; cooling: {}", (t * i as f64), temperature, heating, cooling);
+        println!("time: {}; temperature: {}; heating: {}; cooling: {}", (t), temperature, heating, cooling);
+        writer.serialize((t, temperature, heating, cooling));
     }
+    writer.flush();
 }

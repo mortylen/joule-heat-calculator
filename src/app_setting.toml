@@ -29,4 +29,4 @@ pulse_duration = 1000
 num_of_iterations = 1000
 
 # Set export directory path
-export_path = "/home/runner/joule-heat-rust/src/"
+export_path = "/home/runner/joule-heat-rust/src/tets.csv"
