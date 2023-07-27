@@ -1,13 +1,13 @@
-# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]'
+# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file
 resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.toml"
   
-# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]'
+# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or csv file
 specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.toml"
   
-# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]'
+# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or csv file
 heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.toml"
 
-# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]'
+# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or csv file
 current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
 
 # Set sample surface area [mm^2]
