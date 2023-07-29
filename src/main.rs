@@ -2,7 +2,7 @@
 //use std::time::Duration; 
 //use std::path::{PathBuf, Path}; 
 use std::fs; 
-//use std::fs::{File, OpenOptions}; 
+use std::fs::{File, OpenOptions}; 
 //use std::ffi::OsStr; 
 //use std::io::prelude::*; 
 use std::io;
@@ -53,12 +53,36 @@ struct TblIndexValueData {
 }
 
 impl TblIndexValueData { 
+    //fn fill_tbl_index_value(file_content: &String) -> TblIndexValueData {
+    //    let tbl_data: TblIndexValueData = match toml::from_str(&file_content) { 
+    //        Ok(tbl_data) => tbl_data, 
+    //        Err(error) => panic!("Problem parsing config file: {}", error), 
+    //    }; 
+    //    tbl_data 
+    //}
+
     fn fill_tbl_index_value(file_content: &String) -> TblIndexValueData {
-        let tbl_data: TblIndexValueData = match toml::from_str(&file_content) { 
-            Ok(tbl_data) => tbl_data, 
-            Err(error) => panic!("Problem parsing config file: {}", error), 
-        }; 
-        tbl_data 
+        let mut tbl_data = TblIndexValueData {
+                index_value_data: Vec::new(),
+        };
+        if file_content.starts_with("index_value_data") {                //toml file
+            tbl_data = match toml::from_str(&file_content) { 
+                Ok(tbl_data) => tbl_data, 
+                Err(error) => panic!("Problem parsing config file: {}", error), 
+            }; 
+        }
+        else if file_content.starts_with("index") {                      //csv file
+            let mut reader = csv::Reader::from_reader(file_content.as_bytes());
+            for result in reader.deserialize::<RowIndexValue>() {
+                match result {
+                    Ok(record) => tbl_data.index_value_data.push(record),
+                    Err(err) => {
+                        eprintln!("Error while deserializing row: {}", err);
+                    }
+                }
+            }
+        }
+        tbl_data
     }
 
     fn get_down_index_value(&self, index: f64) -> (f64, f64) {

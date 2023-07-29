@@ -8,7 +8,8 @@ specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat
 heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.toml"
 
 # Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or csv file
-current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
+#current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
+current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.csv"
 
 # Set sample surface area [mm^2]
 surface_area = 70.591586
