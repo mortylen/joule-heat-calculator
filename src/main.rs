@@ -1,14 +1,14 @@
 //use std::sync::mpsc::channel; 
 //use std::time::Duration; 
-use std::path::{PathBuf, Path}; 
+use std::path::Path;
 use std::fs; 
-use std::fs::{File, OpenOptions}; 
+//use std::fs::{File, OpenOptions}; 
 //use std::ffi::OsStr; 
 //use std::io::prelude::*; 
 use std::io;
 use serde::Deserialize; 
 use toml; 
-use csv::{Reader, Writer};
+use csv::Writer;
 use chrono::Utc; 
   
 const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
@@ -53,14 +53,6 @@ struct TblIndexValueData {
 }
 
 impl TblIndexValueData { 
-    //fn fill_tbl_index_value(file_content: &String) -> TblIndexValueData {
-    //    let tbl_data: TblIndexValueData = match toml::from_str(&file_content) { 
-    //        Ok(tbl_data) => tbl_data, 
-    //        Err(error) => panic!("Problem parsing config file: {}", error), 
-    //    }; 
-    //    tbl_data 
-    //}
-
     fn fill_tbl_index_value(file_content: &String) -> TblIndexValueData {
         let mut tbl_data = TblIndexValueData {
                 index_value_data: Vec::new(),
@@ -121,18 +113,7 @@ impl TblIndexValueData {
 }
 
 fn main() {
-    //let config = Config::build(&read_config_file(&CONFIG_FILE_NAME_PATH));
     let config = Config::build(&read_config_file(&set_application()));
-
-    let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
-
-    println!("calculate value: {:#?}", tbl_current.calculate_value_by_index(33.08));
-
-    //println!("{:#?}", tbl_current.get_down_index_value(60.0).0);
-    //println!("{:#?}", tbl_current.get_down_index_value(60.0).1);
-    println!("{:#?}", tbl_current);
-    //println!("{:#?}", config);
-
     get_calculated_data(&config);
 }
 
@@ -146,36 +127,25 @@ fn read_config_file(config_path: &str) -> String {
 }
 
 fn set_application() -> String {
-    //let path;
-    //let path_string;
-
     if Path::new(&CONFIG_FILE_NAME_PATH).exists() {
         let mut user_input = String::new();
         println!("Load data settings from: {} [Y/N]", &CONFIG_FILE_NAME_PATH);
-        user_input.clear();
         io::stdin().read_line(&mut user_input).unwrap();
-        if user_input.trim().to_lowercase() != "y" {
-            println!("Enter setting file path: ");
-            user_input.clear();
-            io::stdin().read_line(&mut user_input).unwrap();
-            //path = Path::new(&user_input);
-            user_input.trim().to_string()
-        } else {
-            //path = Path::new(&CONFIG_FILE_NAME_PATH);
+        if user_input.trim().to_lowercase() == "y" {
             CONFIG_FILE_NAME_PATH.to_string()
+        } else {
+            get_user_input_path()
         }
     } else {
-        let mut user_input = String::new();
-        println!("Enter setting file path: ");
-        user_input.clear();
-        io::stdin().read_line(&mut user_input).unwrap();
-        //path = Path::new(&user_input);
-        //path_string = &user_input;
-        user_input.trim().to_string()
+        get_user_input_path()
     }
+}
 
-    //path_string = path.to_string_lossy().to_string();
-    //path_string.to_string()
+fn get_user_input_path() -> String {
+    let mut user_input = String::new();
+    println!("Enter setting file path: ");
+    io::stdin().read_line(&mut user_input).unwrap();
+    user_input.trim().to_string()
 }
 
 fn get_calculated_data(config: &Config) {
@@ -199,7 +169,6 @@ fn get_calculated_data(config: &Config) {
     let mut Ah: f64;        //= A * h
     let mut t: f64;
 
-    //let datetime_now: String = Utc::now().to_string();
     let datetime_now: String = Utc::now().format("_%Y%m%d-%H%M%S").to_string();
     let writer_result = Writer::from_path(&config.export_path.replace(".csv",  &(datetime_now + ".csv")));
     let mut writer = match writer_result {
@@ -207,9 +176,8 @@ fn get_calculated_data(config: &Config) {
         Err(err) => return Err(Box::new(err)).unwrap(),
     };
 
-    writer.write_record(&["Time", "Temperature", "Heating", "Cooling"]);
+    writer.write_record(&["Time", "Temperature", "Heating", "Cooling"]).expect("Write header of csv file error.");
    
-    
     for i in 0..config.num_of_iterations {
         t = dTime * i as f64;
         mc = m * tbl_specific_heat.calculate_value_by_index(temperature);
@@ -222,7 +190,7 @@ fn get_calculated_data(config: &Config) {
         temperature += dT;
             
         println!("time: {}; temperature: {}; heating: {}; cooling: {}", (t), temperature, heating, cooling);
-        writer.serialize((t, temperature, heating, cooling));
+        writer.serialize((t, temperature, heating, cooling)).expect("Write content of csv file error.");
     }
-    writer.flush();
+    writer.flush().expect("End of csv file error.");
 }

@@ -1,13 +1,13 @@
 [package]
-name = "my-project"
+name = "joule-heat-rust"
 version = "0.1.0"
-authors = ["runner"]
+authors = ["mortylen"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies] 
-notify = "4.0.0" 
+#notify = "4.0.0" 
 serde = { version = "1.0", features = ["derive"]} 
 toml = "0.5" 
 chrono = "0.4.24"
