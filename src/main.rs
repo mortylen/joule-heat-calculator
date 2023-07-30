@@ -1,6 +1,6 @@
 //use std::sync::mpsc::channel; 
 //use std::time::Duration; 
-//use std::path::{PathBuf, Path}; 
+use std::path::{PathBuf, Path}; 
 use std::fs; 
 use std::fs::{File, OpenOptions}; 
 //use std::ffi::OsStr; 
@@ -121,7 +121,8 @@ impl TblIndexValueData {
 }
 
 fn main() {
-    let config = Config::build(&read_config_file(&CONFIG_FILE_NAME_PATH));
+    //let config = Config::build(&read_config_file(&CONFIG_FILE_NAME_PATH));
+    let config = Config::build(&read_config_file(&set_application()));
 
     let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
 
@@ -142,6 +143,39 @@ fn read_config_file(config_path: &str) -> String {
      }; 
   
      file_content 
+}
+
+fn set_application() -> String {
+    //let path;
+    //let path_string;
+
+    if Path::new(&CONFIG_FILE_NAME_PATH).exists() {
+        let mut user_input = String::new();
+        println!("Load data settings from: {} [Y/N]", &CONFIG_FILE_NAME_PATH);
+        user_input.clear();
+        io::stdin().read_line(&mut user_input).unwrap();
+        if user_input.trim().to_lowercase() != "y" {
+            println!("Enter setting file path: ");
+            user_input.clear();
+            io::stdin().read_line(&mut user_input).unwrap();
+            //path = Path::new(&user_input);
+            user_input.trim().to_string()
+        } else {
+            //path = Path::new(&CONFIG_FILE_NAME_PATH);
+            CONFIG_FILE_NAME_PATH.to_string()
+        }
+    } else {
+        let mut user_input = String::new();
+        println!("Enter setting file path: ");
+        user_input.clear();
+        io::stdin().read_line(&mut user_input).unwrap();
+        //path = Path::new(&user_input);
+        //path_string = &user_input;
+        user_input.trim().to_string()
+    }
+
+    //path_string = path.to_string_lossy().to_string();
+    //path_string.to_string()
 }
 
 fn get_calculated_data(config: &Config) {
