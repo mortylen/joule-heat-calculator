@@ -159,20 +159,20 @@ fn get_calculated_data(config: &Config) -> Result<Vec<ExportData>, Box<dyn Error
     let tbl_specific_heat = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.specific_heat_tbl_path));
     let tbl_heat_transfer = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.heat_transfer_tbl_path));
 
-    let e = 2.71828182845904523536;
-    let A = &config.surface_area / 1000000.0;    //mm^2 to m^2
-    let m = &config.weight / 1000.0;             //g to kg
-    let Tp = &config.enviroment_temperature;
-    let dTime = (&config.pulse_duration / 1000.0) / (config.num_of_iterations as f64);
+    let e = 2.71828182845904523536;                           //Euler's number
+    let A = &config.surface_area / 1000000.0;                 //Surface area [m^2]
+    let m = &config.weight / 1000.0;                          //Weight [kg]
+    let Tp = &config.enviroment_temperature;                  //Temperature of environment
+    let dTime = (&config.pulse_duration / 1000.0) / (config.num_of_iterations as f64);    //Delta time [s]
     
-    let mut temperature = config.start_sample_temperature;
-    let mut dT: f64;
-    let mut heating: f64;
-    let mut cooling: f64;
-    let mut tau: f64;
-    let mut mc: f64;        //= m * c
-    let mut Ah: f64;        //= A * h
-    let mut time: f64;
+    let mut temperature = config.start_sample_temperature;    //Temperature of sample
+    let mut dT: f64;                                          //Delta temperature
+    let mut heating: f64;                                     //= ((current^2 * resistance) / mc) * dTime
+    let mut cooling: f64;                                     //= ((Ah * (temperature - Tp)) / mc) * dTime
+    let mut tau_euler_coef: f64;                              //= 1-e^(-tAh / mc)
+    let mut mc: f64;                                          //= m * specific_heat
+    let mut Ah: f64;                                          //= A * heat_transfer
+    let mut time: f64;                                        //= dTime * i
 
     let mut export_data: Vec<ExportData> = Vec::new();
    
@@ -182,9 +182,9 @@ fn get_calculated_data(config: &Config) -> Result<Vec<ExportData>, Box<dyn Error
         Ah = A * tbl_heat_transfer.calculate_value_by_index(temperature);
         heating = ((f64::powf(tbl_current.calculate_value_by_index(temperature), 2.0) * tbl_resistance.calculate_value_by_index(temperature)) / mc) * dTime;
         cooling = ((Ah * (temperature - Tp)) / mc) * dTime;
-        tau = 1.0 - f64::powf(e, -((Ah * time) / mc));
+        tau_euler_coef = 1.0 - f64::powf(e, -((Ah * time) / mc));
         
-        dT = heating - (cooling * tau);
+        dT = heating - (cooling * tau_euler_coef);
         temperature += dT;
             
         //println!("time: {}; temperature: {}; heating: {}; cooling: {}", (time), temperature, heating, cooling);
