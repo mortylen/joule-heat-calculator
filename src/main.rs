@@ -1,11 +1,7 @@
-//use std::sync::mpsc::channel; 
-//use std::time::Duration; 
+use std::io;
 use std::path::Path;
 use std::fs; 
-//use std::fs::{File, OpenOptions}; 
-//use std::ffi::OsStr; 
-//use std::io::prelude::*; 
-use std::io;
+use std::error::Error;
 use serde::Deserialize; 
 use toml; 
 use csv::Writer;
@@ -112,9 +108,18 @@ impl TblIndexValueData {
     }
 }
 
-fn main() {
+struct ExportData {
+    time: f64,
+    temperature: f64,
+    heating: f64,
+    cooling: f64,
+}
+
+fn main() -> Result<(), Box<dyn Error>> {
     let config = Config::build(&read_config_file(&set_application()));
-    get_calculated_data(&config);
+    let calculated_data = get_calculated_data(&config)?;
+    export_data_to_csv(&calculated_data, &config)?;
+    Ok(())
 }
 
 fn read_config_file(config_path: &str) -> String { 
@@ -148,7 +153,7 @@ fn get_user_input_path() -> String {
     user_input.trim().to_string()
 }
 
-fn get_calculated_data(config: &Config) {
+fn get_calculated_data(config: &Config) -> Result<Vec<ExportData>, Box<dyn Error>> {
     let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
     let tbl_resistance = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.resistance_tbl_path));
     let tbl_specific_heat = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.specific_heat_tbl_path));
@@ -167,30 +172,50 @@ fn get_calculated_data(config: &Config) {
     let mut tau: f64;
     let mut mc: f64;        //= m * c
     let mut Ah: f64;        //= A * h
-    let mut t: f64;
+    let mut time: f64;
 
-    let datetime_now: String = Utc::now().format("_%Y%m%d-%H%M%S").to_string();
-    let writer_result = Writer::from_path(&config.export_path.replace(".csv",  &(datetime_now + ".csv")));
-    let mut writer = match writer_result {
-        Ok(writer) => writer,
-        Err(err) => return Err(Box::new(err)).unwrap(),
-    };
-
-    writer.write_record(&["Time", "Temperature", "Heating", "Cooling"]).expect("Write header of csv file error.");
+    let mut export_data: Vec<ExportData> = Vec::new();
    
     for i in 0..config.num_of_iterations {
-        t = dTime * i as f64;
+        time = dTime * i as f64;
         mc = m * tbl_specific_heat.calculate_value_by_index(temperature);
         Ah = A * tbl_heat_transfer.calculate_value_by_index(temperature);
         heating = ((f64::powf(tbl_current.calculate_value_by_index(temperature), 2.0) * tbl_resistance.calculate_value_by_index(temperature)) / mc) * dTime;
         cooling = ((Ah * (temperature - Tp)) / mc) * dTime;
-        tau = 1.0 - f64::powf(e, -((Ah * t) / mc));
+        tau = 1.0 - f64::powf(e, -((Ah * time) / mc));
         
         dT = heating - (cooling * tau);
         temperature += dT;
             
-        println!("time: {}; temperature: {}; heating: {}; cooling: {}", (t), temperature, heating, cooling);
-        writer.serialize((t, temperature, heating, cooling)).expect("Write content of csv file error.");
+        //println!("time: {}; temperature: {}; heating: {}; cooling: {}", (time), temperature, heating, cooling);
+        
+        export_data.push(ExportData {
+            time,
+            temperature,
+            heating,
+            cooling
+        });
     }
-    writer.flush().expect("End of csv file error.");
+
+    Ok(export_data)
+}
+
+fn export_data_to_csv(data: &[ExportData], config: &Config)  -> Result<(), Box<dyn Error>> {
+    let datetime_now: String = Utc::now().format("_%Y%m%d-%H%M%S").to_string();
+    let writer_result = Writer::from_path(&config.export_path.replace(".csv",  &(datetime_now + ".csv")));
+    let mut writer = writer_result?;
+
+    writer.write_record(&["Time", "Temperature", "Heating", "Cooling"])?;
+
+    for item in data {
+        writer.serialize((
+            item.time,
+            item.temperature,
+            item.heating,
+            item.cooling,
+        ))?;
+    }
+
+    writer.flush()?;
+    Ok(())
 }
