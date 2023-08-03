@@ -2,12 +2,15 @@ use std::io;
 use std::path::Path;
 use std::fs; 
 use std::error::Error;
+use std::env;
 use serde::Deserialize; 
 use toml; 
 use csv::Writer;
 use chrono::Utc; 
   
-const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
+//const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
+//static mut CONFIG_FILE_NAME_PATH: &str = "app_setting.toml"; 
+const CONFIG_FILE_NAME_PATH: &str = "app_setting.toml"; 
 
 #[derive(Deserialize)]
 #[derive(Debug)]
@@ -116,9 +119,23 @@ struct ExportData {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let config = Config::build(&read_config_file(&set_application()));
+    let args: Vec<String> = env::args().collect();
+    let config_file_path: String = if args.len() > 1 {
+        args[1].to_string()
+    } else {
+        CONFIG_FILE_NAME_PATH.to_string()
+    };
+    
+    //println!("{}", config_file_path);
+    
+    let config = Config::build(&read_config_file(&set_application(&config_file_path)));
     let calculated_data = get_calculated_data(&config)?;
     export_data_to_csv(&calculated_data, &config)?;
+
+    let mut user_input = String::new();
+    println!("Complete... Click any key for close.");
+    io::stdin().read_line(&mut user_input).unwrap();
+    
     Ok(())
 }
 
@@ -131,13 +148,28 @@ fn read_config_file(config_path: &str) -> String {
      file_content 
 }
 
-fn set_application() -> String {
-    if Path::new(&CONFIG_FILE_NAME_PATH).exists() {
+//fn set_application() -> String {
+//    if Path::new(&CONFIG_FILE_NAME_PATH).exists() {
+//        let mut user_input = String::new();
+//        println!("Load data settings from: {} [Y/N]", &CONFIG_FILE_NAME_PATH);
+//        io::stdin().read_line(&mut user_input).unwrap();
+//        if user_input.trim().to_lowercase() == "y" {
+//            CONFIG_FILE_NAME_PATH.to_string()
+//        } else {
+//            get_user_input_path()
+//        }
+//    } else {
+//        get_user_input_path()
+//    }
+//}
+
+fn set_application(config_file_path: &String) -> String {
+    if Path::new(&config_file_path).exists() {
         let mut user_input = String::new();
-        println!("Load data settings from: {} [Y/N]", &CONFIG_FILE_NAME_PATH);
+        println!("Load data settings from: {} [Y/N]", &config_file_path);
         io::stdin().read_line(&mut user_input).unwrap();
         if user_input.trim().to_lowercase() == "y" {
-            CONFIG_FILE_NAME_PATH.to_string()
+            config_file_path.to_string()
         } else {
             get_user_input_path()
         }
