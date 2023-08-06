@@ -84,6 +84,19 @@ impl TblIndexValueData {
     (down_index, down_value)
     }
 
+    //fn get_down_index_value(&self, index: f64) -> Option<(f64, f64)> {
+    //    match self.index_value_data.iter().find(|&x| x.index <= index) {
+    //        Some(value) => Some((value.index, value.value)),
+    //        None => {
+    //            if let Some(first_value) = self.index_value_data.first() {
+    //                Some((first_value.index, first_value.value))
+    //            } else {
+    //                None
+    //            }
+    //        }
+    //    }
+    //}
+
     fn get_up_index_value(&self, index: f64) -> (f64, f64) {
         let (up_index, up_value) = match self.index_value_data.iter().find(|&x| x.index >= index) {
             Some(value) => (value.index, value.value),
@@ -91,6 +104,19 @@ impl TblIndexValueData {
         };
     (up_index, up_value)
     }
+
+    //fn get_up_index_value(&self, index: f64) -> Option<(f64, f64)> {
+    //    match self.index_value_data.iter().find(|&x| x.index >= index) {
+    //        Some(value) => Some((value.index, value.value)),
+    //        None => {
+    //            if let Some(last_value) = self.index_value_data.last() {
+    //                Some((last_value.index, last_value.value))
+    //            } else {
+    //                None
+    //            }
+    //        }
+    //    }
+    //}
 
     fn get_delta(down_number: f64, up_number: f64) -> f64 {
         let delta_number = if up_number == down_number {
@@ -128,24 +154,66 @@ fn main() -> Result<(), Box<dyn Error>> {
     
     //println!("{}", config_file_path);
     
-    let config = Config::build(&read_config_file(&set_application(&config_file_path)));
-    let calculated_data = get_calculated_data(&config)?;
-    export_data_to_csv(&calculated_data, &config)?;
+    //Set config
+    let config = match read_config_file(&set_application(&config_file_path)) {
+        Ok(file_content) => Config::build(&file_content),
+        Err(error) => {
+            println!("Error reading config file: {}. {}", &config_file_path, error);
+            io::stdin().read_line(&mut String::new()).unwrap();
+            panic!("Application terminate.");
+        } 
+    };
+    //let config = Config::build(&read_config_file(&set_application(&config_file_path)));
+
+    //Run calculation
+    let calculated_data: Vec<ExportData> = match get_calculated_data(&config) {
+        Ok(data) => {
+            data
+        }
+        Err(error) => {
+            println!("Calculation error: {}", error);
+            io::stdin().read_line(&mut String::new()).unwrap();
+            panic!("Application terminate.");
+            //vec![ExportData {
+            //    time: 0.0,
+            //    temperature: 0.0,
+            //    heating: 0.0,
+            //    cooling: 0.0,
+            //}]
+        }
+    };
+    //let calculated_data = get_calculated_data(&config)?;
+
+    //Export data to CSV file
+    if let Err(error) = export_data_to_csv(&calculated_data, &config) {
+        println!("Error exporting data to CSV, check 'export_path' value in setting.toml file. {}", error);
+    } else {
+        println!("Data exported successfully!");
+    }
+    
+    //export_data_to_csv(&calculated_data, &config)?;
 
     let mut user_input = String::new();
-    println!("Complete... Click any key for close.");
+    println!("Complete... Press any key to close.");
     io::stdin().read_line(&mut user_input).unwrap();
     
     Ok(())
 }
 
-fn read_config_file(config_path: &str) -> String { 
-     let file_content = match fs::read_to_string(&config_path) { 
-         Ok(file_content) => file_content, 
-         Err(error) => panic!("Read config file error. Invalid configuration file: '{}'. {}", &config_path, error), 
-     }; 
+//fn read_config_file(config_path: &str) -> String { 
+//     let file_content = match fs::read_to_string(&config_path) { 
+//         Ok(file_content) => file_content, 
+//         Err(error) => panic!("Read config file error. Invalid configuration file: '{}'. {}", &config_path, error), 
+//     }; 
   
-     file_content 
+//     file_content 
+//}
+
+fn read_config_file(config_path: &str) -> Result<String, io::Error> {
+    match fs::read_to_string(&config_path) {
+        Ok(file_content) => Ok(file_content),
+        Err(error) => Err(error),
+    }
 }
 
 //fn set_application() -> String {
@@ -186,10 +254,10 @@ fn get_user_input_path() -> String {
 }
 
 fn get_calculated_data(config: &Config) -> Result<Vec<ExportData>, Box<dyn Error>> {
-    let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path));
-    let tbl_resistance = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.resistance_tbl_path));
-    let tbl_specific_heat = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.specific_heat_tbl_path));
-    let tbl_heat_transfer = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.heat_transfer_tbl_path));
+    let tbl_current = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.current_tbl_path)?);
+    let tbl_resistance = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.resistance_tbl_path)?);
+    let tbl_specific_heat = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.specific_heat_tbl_path)?);
+    let tbl_heat_transfer = TblIndexValueData::fill_tbl_index_value(&read_config_file(&config.heat_transfer_tbl_path)?);
 
     let e = 2.71828182845904523536;                           //Euler's number
     let A = &config.surface_area / 1000000.0;                 //Surface area [m^2]
@@ -232,7 +300,7 @@ fn get_calculated_data(config: &Config) -> Result<Vec<ExportData>, Box<dyn Error
     Ok(export_data)
 }
 
-fn export_data_to_csv(data: &[ExportData], config: &Config)  -> Result<(), Box<dyn Error>> {
+fn export_data_to_csv(data: &[ExportData], config: &Config)  -> Result<(), io::Error> {
     let datetime_now: String = Utc::now().format("_%Y%m%d-%H%M%S").to_string();
     let writer_result = Writer::from_path(&config.export_path.replace(".csv",  &(datetime_now + ".csv")));
     let mut writer = writer_result?;
