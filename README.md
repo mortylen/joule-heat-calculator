@@ -6,13 +6,14 @@ image
 ## Joule Heating Calculation and Cooling via Heat Transfer in Wire.
 
 [Article about this](https://mortylen...)
+|
 [Donate](https://mortylen...)
 
-[Title](#Joule Heat Calculator)
-[Introduction](#Introduction)
-[Project Layout](#Project Layout)
-[Mathematics](#Mathematics, I have to explain this a little bit.)
-[Congiguration files](#Create congiguration files)
+* [Title](#Joule-Heat-Calculator)
+* [Introduction](#Introduction)
+* [Project Layout](#Project-Layout)
+* [Mathematics](#Mathematics,-I-have-to-explain-this-a-little-bit.)
+[Congiguration files](#Create-congiguration-files)
 
 ## Project Layout
 ```bash
@@ -47,16 +48,16 @@ If I want to track the heating process over time, it is necessary to break down 
 
 In the calculation, the following variables are involved:
 
-I - DC electric current [A] dependet on time
-R - sample resistance [ohm] dependet on temperature
-A - surface area of the sample [m^2]
-h - heat transfer coefficient dependet on temperature
-Ts - initial surface temperature of sample [K]
-Tp - temperature of the environment [K]
-m - weight of the sample [kg]
-c - mass thermal capacity dependet on temperature
-t - iteration time interval [s]
-e - Euler's number (2.718281828459...)
+- I - DC electric current [A] dependet on time
+- R - sample resistance [ohm] dependet on temperature
+- A - surface area of the sample [m^2]
+- h - heat transfer coefficient dependet on temperature
+- Ts - initial surface temperature of sample [K]
+- Tp - temperature of the environment [K]
+- m - weight of the sample [kg]
+- c - mass thermal capacity dependet on temperature
+- t - iteration time interval [s]
+- e - Euler's number (2.718281828459...)
 
 The value of I (DC electric current) will be selected from a table that represents the current values at different points in time. This table will have two columns, one for time and the other for the corresponding current value. Essentially, it represents the waveform of the current pulse.
 
