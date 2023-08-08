@@ -7,6 +7,8 @@ image
 
 [Article about this](https://mortylen...)
 |
+[License](https://github.com/mortylen/joule-heat/blob/main/LICENSE)
+|
 [Donate](https://mortylen...)
 
 * [Title](#Joule-Heat-Calculator)
@@ -14,9 +16,11 @@ image
 * [Project Layout](#Project-Layout)
 * [Mathematics](#Mathematics,-I-have-to-explain-this-a-little-bit)
 * [Congiguration files](#Create-configuration-files)
+* [How to run it?](#How-to-run-it?)
+* [License](#License)
 
 ## Project Layout
-```bash
+```
 joule-heat/
 |--src                     # All source code
 |  |--setting                # Necessary data for calculation
@@ -71,7 +75,7 @@ Firstly, it is necessary to consider the configuration file, from which the appl
 The main setting file looks like this:
 
 *app_setting.toml*
-```bash
+```
 # Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file
 resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.toml"
   
@@ -109,7 +113,7 @@ export_path = "/home/runner/joule-heat-rust/src/tets.csv"
 And tables with data like current, resistance, heat transfer and mass thermal capacity looks like this:
 
 *current_tbl.toml*
-```bash
+```toml
 index_value_data = [ 
 {index=1,value=10},
 {index=10,value=20},
@@ -123,7 +127,7 @@ index_value_data = [
 or as csv like this:
 
 *current_tbl.csv*
-```bash
+```csv
 index, value
 1, 10
 10, 20
@@ -144,3 +148,28 @@ Contains the mass thermal capacity dependet on temperature. Heat capacity is a p
 
 - **heat_transfer_tbl:**
 Contains the heat transfer coefficient dependet on temperature. Is the proportionality constant between the heat flux and the thermodynamic driving force for flow of heat. The ***'index'*** reprezents the temperature data **[K]** and ***'value'*** represents the heat transfer coefficient.
+
+## How to run it?
+Download the latest Release and extract it to your local computer.
+
+### Requirements
+You must have Rust installed to run the application. See [Install Rust](https://rust-lang.org/tools/install)
+
+### Instructions
+Run the application with a parameter that contains the path to the settings file (by default it is ***app_setting.toml***).
+
+```bash
+joule-heat-calculator.exe app_setting.toml
+```
+
+Or run the application without the parameter and the application prompts you for the path to the setrings file.
+
+********************
+image
+********************
+
+### Note
+Prior to execution, please review the ***app_setting.toml*** file or your designated settings file, and ensure that all file paths are configured in alignment with the current directory. Additionally, adjust all parameters within the file to suit your specific requirements. It's important not to overlook the customization of values within all related tables according to your specific needs.
+
+## License
+This project is licensed under the [Apache License 2.0](https://github.com/mortylen/joule-heat/blob/main/LICENSE) license.
