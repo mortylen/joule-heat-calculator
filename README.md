@@ -15,7 +15,7 @@ image
 * [Introduction](#Introduction)
 * [Project Layout](#Project-Layout)
 * [Mathematics](#Mathematics,-I-have-to-explain-this-a-little-bit)
-* [Congiguration files](#Create-configuration-files)
+* [Configuration files](#Create-configuration-files)
 * [How to run it?](#How-to-run-it?)
 * [License](#License)
 
@@ -75,7 +75,7 @@ Firstly, it is necessary to consider the configuration file, from which the appl
 The main setting file looks like this:
 
 *app_setting.toml*
-```
+```toml
 # Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file
 resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.toml"
   
