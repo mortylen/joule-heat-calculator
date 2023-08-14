@@ -42,9 +42,8 @@ The path to this configuration file is either sent as an argument when the appli
 ## Mathematics, I have to explain this a little bit
 
 I have this mathematical formula:
-*********************
-img formula
-*********************
+
+![math](https://github.com/mortylen/joule-heat/blob/main/img/math.png?raw=true)
 
 If I want to track the heating process over time, it is necessary to break down the calculation into numerous small steps or iterations. The more iterations there are, the more accurate and smoother the calculation becomes. In each iteration, the formula will be computed, and the result (deltaT) will be added to the current temperature of the sample.
 
@@ -54,7 +53,7 @@ In the calculation, the following variables are involved:
 - **R** - sample resistance [ohm] dependet on temperature
 - **A** - surface area of the sample [m^2]
 - **h** - heat transfer coefficient dependet on temperature
-- **Ts** - initial surface temperature of sample [K]
+- **Tsurf** - initial surface temperature of sample [K]
 - **Tp** - temperature of the environment [K]
 - **m** - weight of the sample [kg]
 - **c** - mass thermal capacity dependet on temperature
@@ -65,7 +64,7 @@ The value of **I** (DC electric current) will be selected from a table that repr
 
 Similarly, the values for **R** (resistance), **h** (heat transfer coefficient), and **c** (mass thermal capacity) will be selected using a similar approach, but the waveform will depend on temperature instead of time.
 
-The other variables, such as **A** (surface area) and **m** (weight), remain constant for a specific sample. Additionally, **Ts** (initial surface temperature) and **Tp** (environmental temperature) are initial constants required for the calculation. The time interval, **t**, is calculated by dividing the pulse duration by the number of iterations. And **e** (Euler's number) is used for the exponential calculation.
+The other variables, such as **A** (surface area) and **m** (weight), remain constant for a specific sample. Additionally, **Tsurf** (initial surface temperature) and **Tp** (environmental temperature) are initial constants required for the calculation. The time interval, **t**, is calculated by dividing the pulse duration by the number of iterations. And **e** (Euler's number) is used for the exponential calculation.
 
 ## Create configuration files
 Firstly, it is necessary to consider the configuration file, from which the application will read all the essential parameters required for the calculation. I have chosen the TOML format for this purpose. Within the file, initial values for the calculation will be provided, along with references to tables containing relevant data such as current, resistance, heat transfer coefficients, and mass thermal capacity. These tables will be stored in either **TOML** or **CSV** format.
@@ -162,7 +161,7 @@ joule-heat-calculator.exe app_setting.toml
 
 Or run the application without the parameter and the application prompts you for the path to the settings file.
 
-![chart](https://github.com/mortylen/joule-heat/blob/main/img/settingfile.png?raw=true)
+![console](https://github.com/mortylen/joule-heat/blob/main/img/settingfile.png?raw=true)
 
 ### Note
 Prior to execution, please review the ***app_setting.toml*** file or your designated settings file, and ensure that all file paths are configured in alignment with the current directory. Additionally, adjust all parameters within the file to suit your specific requirements. It's important not to overlook the customization of values within all related tables according to your specific needs.
