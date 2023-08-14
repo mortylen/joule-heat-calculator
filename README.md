@@ -12,9 +12,9 @@
 * [Title](#Joule-Heat-Calculator)
 * [Introduction](#Introduction)
 * [Project Layout](#Project-Layout)
-* [Mathematics](#Mathematics,-I-have-to-explain-this-a-little-bit)
+* [Mathematics](#Mathematics%2C-I-have-to-explain-this-a-little-bit)
 * [Configuration files](#Create-configuration-files)
-* [How to run it?](#How-to-run-it?)
+* [How to run it?](#How-to-run-it%3F)
 * [License](#License)
 
 ## Project Layout
