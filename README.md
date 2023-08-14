@@ -1,7 +1,5 @@
 # Joule Heat Calculator
-********************
-image
-********************
+![chart](https://github.com/mortylen/joule-heat/blob/main/img/chart.png?raw=true)
 
 ## Joule Heating Calculation and Cooling via Heat Transfer in Wire.
 
@@ -164,9 +162,7 @@ joule-heat-calculator.exe app_setting.toml
 
 Or run the application without the parameter and the application prompts you for the path to the settings file.
 
-********************
-image
-********************
+![chart](https://github.com/mortylen/joule-heat/blob/main/img/settingfile.png?raw=true)
 
 ### Note
 Prior to execution, please review the ***app_setting.toml*** file or your designated settings file, and ensure that all file paths are configured in alignment with the current directory. Additionally, adjust all parameters within the file to suit your specific requirements. It's important not to overlook the customization of values within all related tables according to your specific needs.
