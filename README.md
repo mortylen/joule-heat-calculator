@@ -162,7 +162,7 @@ Run the application with a parameter that contains the path to the settings file
 joule-heat-calculator.exe app_setting.toml
 ```
 
-Or run the application without the parameter and the application prompts you for the path to the setrings file.
+Or run the application without the parameter and the application prompts you for the path to the settings file.
 
 ********************
 image
