@@ -164,7 +164,7 @@ Or run the application without the parameter and the application prompts you for
 ![console](https://github.com/mortylen/joule-heat/blob/main/img/settingfile.png?raw=true)
 
 ### Manual
-For detailed instructions see the file [***MANUAL.md***]([https://rust-lang.org/tools/install](https://github.com/mortylen/joule-heat/blob/main/docs/MANUAL.md)) or ***MANUAL.txt*** in the ***docs*** folder for the latest release version.
+For detailed instructions see the file ***[MANUAL.md](https://github.com/mortylen/joule-heat/blob/main/docs/MANUAL.md)*** or ***MANUAL.txt*** in the ***docs*** folder for the latest release version.
 
 ### Note
 Prior to execution, please review the ***app_setting.toml*** file or your designated settings file, and ensure that all file paths are configured in alignment with the current directory. Additionally, adjust all parameters within the file to suit your specific requirements. It's important not to overlook the customization of values within all related tables according to your specific needs.
