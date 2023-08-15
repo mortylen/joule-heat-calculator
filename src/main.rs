@@ -9,7 +9,6 @@ use csv::Writer;
 use chrono::Utc; 
   
 //const CONFIG_FILE_NAME_PATH: &str = "/home/runner/joule-heat-rust/src/app_setting.toml"; 
-//static mut CONFIG_FILE_NAME_PATH: &str = "app_setting.toml"; 
 const CONFIG_FILE_NAME_PATH: &str = "app_setting.toml"; 
 
 #[derive(Deserialize)]
@@ -76,14 +75,6 @@ impl TblIndexValueData {
         tbl_data
     }
 
-    // fn get_down_index_value(&self, index: f64) -> (f64, f64) {
-    //     let (down_index, down_value) = match self.index_value_data.iter().find(|&x| x.index <= index) {
-    //         Some(value) => (value.index, value.value),
-    //         None => (self.index_value_data.first().unwrap().index, self.index_value_data.first().unwrap().value),
-    //     };
-    // (down_index, down_value)
-    // }
-
     fn get_down_index_value(&self, index: f64) -> Option<(f64, f64)> {
        match self.index_value_data.iter().find(|&x| x.index <= index) {
            Some(value) => Some((value.index, value.value)),
@@ -96,14 +87,6 @@ impl TblIndexValueData {
            }
        }
     }
-
-    // fn get_up_index_value(&self, index: f64) -> (f64, f64) {
-    //     let (up_index, up_value) = match self.index_value_data.iter().find(|&x| x.index >= index) {
-    //         Some(value) => (value.index, value.value),
-    //         None => (self.index_value_data.last().unwrap().index, self.index_value_data.last().unwrap().value),
-    //     };
-    // (up_index, up_value)
-    // }
 
     fn get_up_index_value(&self, index: f64) -> Option<(f64, f64)> {
        match self.index_value_data.iter().find(|&x| x.index >= index) {
@@ -144,18 +127,6 @@ impl TblIndexValueData {
 
         ((index - down_index) / delta_index) * delta_value + down_value
     }
-
-    // fn calculate_value_by_index(&self, index: f64) -> Option<f64> {
-    //     match (self.get_down_index_value(index), self.get_up_index_value(index)) {
-    //         (Some((down_index, down_value)), Some((up_index, up_value))) => {
-    //             let delta_index = TblIndexValueData::get_delta(down_index, up_index);
-    //             let delta_value = TblIndexValueData::get_delta(down_value, up_value);
-
-    //             Some(((index - down_index) / delta_index) * delta_value + down_value)
-    //         }
-    //         _ => None,
-    //     }
-    // }
 }
 
 struct ExportData {
@@ -173,8 +144,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         CONFIG_FILE_NAME_PATH.to_string()
     };
     
-    //println!("{}", config_file_path);
-    
     //Set config
     let config = match read_config_file(&set_application(&config_file_path)) {
         Ok(file_content) => Config::build(&file_content),
@@ -184,7 +153,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             panic!("Application terminate.");
         } 
     };
-    //let config = Config::build(&read_config_file(&set_application(&config_file_path)));
 
     //Run calculation
     let calculated_data: Vec<ExportData> = match get_calculated_data(&config) {
@@ -195,15 +163,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("Calculation error: {}", error);
             io::stdin().read_line(&mut String::new()).unwrap();
             panic!("Application terminate.");
-            //vec![ExportData {
-            //    time: 0.0,
-            //    temperature: 0.0,
-            //    heating: 0.0,
-            //    cooling: 0.0,
-            //}]
         }
     };
-    //let calculated_data = get_calculated_data(&config)?;
 
     //Export data to CSV file
     if let Err(error) = export_data_to_csv(&calculated_data, &config) {
@@ -211,8 +172,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     } else {
         println!("Data exported successfully!");
     }
-    
-    //export_data_to_csv(&calculated_data, &config)?;
 
     let mut user_input = String::new();
     println!("Complete... Press any key to close.");
@@ -221,36 +180,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-//fn read_config_file(config_path: &str) -> String { 
-//     let file_content = match fs::read_to_string(&config_path) { 
-//         Ok(file_content) => file_content, 
-//         Err(error) => panic!("Read config file error. Invalid configuration file: '{}'. {}", &config_path, error), 
-//     }; 
-  
-//     file_content 
-//}
-
 fn read_config_file(config_path: &str) -> Result<String, io::Error> {
     match fs::read_to_string(&config_path) {
         Ok(file_content) => Ok(file_content),
         Err(error) => Err(error),
     }
 }
-
-//fn set_application() -> String {
-//    if Path::new(&CONFIG_FILE_NAME_PATH).exists() {
-//        let mut user_input = String::new();
-//        println!("Load data settings from: {} [Y/N]", &CONFIG_FILE_NAME_PATH);
-//        io::stdin().read_line(&mut user_input).unwrap();
-//        if user_input.trim().to_lowercase() == "y" {
-//            CONFIG_FILE_NAME_PATH.to_string()
-//        } else {
-//            get_user_input_path()
-//        }
-//    } else {
-//        get_user_input_path()
-//    }
-//}
 
 fn set_application(config_file_path: &String) -> String {
     if Path::new(&config_file_path).exists() {
