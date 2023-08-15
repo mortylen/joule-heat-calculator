@@ -76,47 +76,47 @@ impl TblIndexValueData {
         tbl_data
     }
 
-    fn get_down_index_value(&self, index: f64) -> (f64, f64) {
-        let (down_index, down_value) = match self.index_value_data.iter().find(|&x| x.index <= index) {
-            Some(value) => (value.index, value.value),
-            None => (self.index_value_data.first().unwrap().index, self.index_value_data.first().unwrap().value),
-        };
-    (down_index, down_value)
+    // fn get_down_index_value(&self, index: f64) -> (f64, f64) {
+    //     let (down_index, down_value) = match self.index_value_data.iter().find(|&x| x.index <= index) {
+    //         Some(value) => (value.index, value.value),
+    //         None => (self.index_value_data.first().unwrap().index, self.index_value_data.first().unwrap().value),
+    //     };
+    // (down_index, down_value)
+    // }
+
+    fn get_down_index_value(&self, index: f64) -> Option<(f64, f64)> {
+       match self.index_value_data.iter().find(|&x| x.index <= index) {
+           Some(value) => Some((value.index, value.value)),
+           None => {
+               if let Some(first_value) = self.index_value_data.first() {
+                   Some((first_value.index, first_value.value))
+               } else {
+                   None
+               }
+           }
+       }
     }
 
-    //fn get_down_index_value(&self, index: f64) -> Option<(f64, f64)> {
-    //    match self.index_value_data.iter().find(|&x| x.index <= index) {
-    //        Some(value) => Some((value.index, value.value)),
-    //        None => {
-    //            if let Some(first_value) = self.index_value_data.first() {
-    //                Some((first_value.index, first_value.value))
-    //            } else {
-    //                None
-    //            }
-    //        }
-    //    }
-    //}
+    // fn get_up_index_value(&self, index: f64) -> (f64, f64) {
+    //     let (up_index, up_value) = match self.index_value_data.iter().find(|&x| x.index >= index) {
+    //         Some(value) => (value.index, value.value),
+    //         None => (self.index_value_data.last().unwrap().index, self.index_value_data.last().unwrap().value),
+    //     };
+    // (up_index, up_value)
+    // }
 
-    fn get_up_index_value(&self, index: f64) -> (f64, f64) {
-        let (up_index, up_value) = match self.index_value_data.iter().find(|&x| x.index >= index) {
-            Some(value) => (value.index, value.value),
-            None => (self.index_value_data.last().unwrap().index, self.index_value_data.last().unwrap().value),
-        };
-    (up_index, up_value)
+    fn get_up_index_value(&self, index: f64) -> Option<(f64, f64)> {
+       match self.index_value_data.iter().find(|&x| x.index >= index) {
+           Some(value) => Some((value.index, value.value)),
+           None => {
+               if let Some(last_value) = self.index_value_data.last() {
+                   Some((last_value.index, last_value.value))
+               } else {
+                   None
+               }
+           }
+       }
     }
-
-    //fn get_up_index_value(&self, index: f64) -> Option<(f64, f64)> {
-    //    match self.index_value_data.iter().find(|&x| x.index >= index) {
-    //        Some(value) => Some((value.index, value.value)),
-    //        None => {
-    //            if let Some(last_value) = self.index_value_data.last() {
-    //                Some((last_value.index, last_value.value))
-    //            } else {
-    //                None
-    //            }
-    //        }
-    //    }
-    //}
 
     fn get_delta(down_number: f64, up_number: f64) -> f64 {
         let delta_number = if up_number == down_number {
@@ -128,13 +128,34 @@ impl TblIndexValueData {
     }
 
     fn calculate_value_by_index(&self, index: f64) -> f64 {
-        let (down_index, down_value) = self.get_down_index_value(index);
-        let (up_index, up_value) = self.get_up_index_value(index);
+        let (down_index, down_value) = self.get_down_index_value(index).unwrap_or_else(|| {
+            println!("Index search error 'get_down_index_value' for index: {}", index);
+            io::stdin().read_line(&mut String::new()).unwrap();
+            panic!("Application terminate.");
+        });
+        
+    let (up_index, up_value) = self.get_up_index_value(index).unwrap_or_else(|| {
+            println!("Index search error 'get_up_index_value' for index: {}", index);
+            io::stdin().read_line(&mut String::new()).unwrap();
+            panic!("Application terminate.");
+        });
         let delta_index = TblIndexValueData::get_delta(down_index, up_index);
         let delta_value = TblIndexValueData::get_delta(down_value, up_value);
 
         ((index - down_index) / delta_index) * delta_value + down_value
     }
+
+    // fn calculate_value_by_index(&self, index: f64) -> Option<f64> {
+    //     match (self.get_down_index_value(index), self.get_up_index_value(index)) {
+    //         (Some((down_index, down_value)), Some((up_index, up_value))) => {
+    //             let delta_index = TblIndexValueData::get_delta(down_index, up_index);
+    //             let delta_value = TblIndexValueData::get_delta(down_value, up_value);
+
+    //             Some(((index - down_index) / delta_index) * delta_value + down_value)
+    //         }
+    //         _ => None,
+    //     }
+    // }
 }
 
 struct ExportData {
@@ -286,9 +307,7 @@ fn get_calculated_data(config: &Config) -> Result<Vec<ExportData>, Box<dyn Error
         
         dT = heating - (cooling * tau_euler_coef);
         temperature += dT;
-            
-        //println!("time: {}; temperature: {}; heating: {}; cooling: {}", (time), temperature, heating, cooling);
-        
+                   
         export_data.push(ExportData {
             time,
             temperature,
