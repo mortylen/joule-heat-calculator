@@ -145,7 +145,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
     
     //Set config
-    let config = match read_config_file(&set_application(&config_file_path)) {
+    let config = match read_config_file(&set_config_path(&config_file_path)) {
         Ok(file_content) => Config::build(&file_content),
         Err(error) => {
             println!("Error reading config file: {}. {}", &config_file_path, error);
@@ -187,7 +187,7 @@ fn read_config_file(config_path: &str) -> Result<String, io::Error> {
     }
 }
 
-fn set_application(config_file_path: &String) -> String {
+fn set_config_path(config_file_path: &String) -> String {
     if Path::new(&config_file_path).exists() {
         let mut user_input = String::new();
         println!("Load data settings from: {} [Y/N]", &config_file_path);
