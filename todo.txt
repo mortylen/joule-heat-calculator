@@ -5,4 +5,7 @@
 - Add command line argument: config file    done
 - message after complete, not close app     done
 - error handling
-- rename fn set_application to set_config_path
+- rename fn set_application to set_config_path done
+- write manual
+- complie for win and linux
+- rename repository
