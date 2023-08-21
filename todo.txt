@@ -10,3 +10,4 @@
 - complie for win and linux
 - rename repository
 - change name in LICENSE
+- add message "in progress..."
