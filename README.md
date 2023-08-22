@@ -1,13 +1,14 @@
-# Joule Heat Calculator
 ![chart](https://github.com/mortylen/joule-heat/blob/main/img/chart.png?raw=true)
+
+# Joule Heat Calculator
 
 ## Joule Heating Calculation and Cooling via Heat Transfer in Wire.
 
-[Article about this](https://mortylen...)
+**[Article about this](https://mortylen.hashnode.dev)**
 |
-[License](https://github.com/mortylen/joule-heat/blob/main/LICENSE)
+**[License](https://github.com/mortylen/joule-heat/blob/main/LICENSE)**
 |
-[Donate](https://mortylen...)
+**[Donate](https://mortylen.hashnode.dev/contact)**
 
 * [Title](#Joule-Heat-Calculator)
 * [Introduction](#Introduction)
@@ -20,14 +21,21 @@
 ## Project Layout
 ```
 joule-heat/
+|--docs                    # Folder for other documents
+|--|--MANUAL.md              # Manual for last release     
 |--src                     # All source code
 |  |--setting                # Necessary data for calculation
 |  |  |--current_tbl.csv       # Sample of the current table
 |  |  |--heat_transfer_tbl.csv # Sample of the heat transfer table
 |  |  |--resistance_tbl.csv    # Sample of the resistance table
 |  |  |--specific_heat_tbl.csv # Sample of the spicific heat table
-|  |--app_setting.toml     # Sample of the main setting file
-|  |--main.rs              # Source code
+|  |--app_setting.toml       # Sample of the main setting file
+|  |--main.rs                # Source code
+|--CODE_OF_CONDUCT.md      # Code of conduct for this project
+|--Cargo.toml              # Manifest file for Rust's package manager
+|--LICENCE                 # Licence file for this project
+|--NOTICE                  # Notice for the licence file
+|--README                  # Readme file
 ```
 
 ## Introduction
