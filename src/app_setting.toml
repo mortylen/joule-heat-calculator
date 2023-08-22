@@ -1,11 +1,11 @@
 # Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file
-resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.toml"
+resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.csv"
   
 # Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or csv file
-specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.toml"
+specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.csv"
   
 # Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or csv file
-heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.toml"
+heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.csv"
 
 # Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or csv file
 #current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
@@ -18,16 +18,16 @@ surface_area = 70.591586
 weight = 0.17037
 
 # Set start sample temperature [K]
-start_sample_temperature = 77.0
+start_sample_temperature = 77.3
 
 # Set enviroment temperature [K]
-enviroment_temperature = 77.0
+enviroment_temperature = 77.3
 
 # Set pulse duration [ms]
 pulse_duration = 1000
 
 # Set number of iterations
-num_of_iterations = 1000
+num_of_iterations = 10000
 
 # Set export directory path
-export_path = "/home/runner/joule-heat-rust/src/tets.csv"
+export_path = "/home/runner/joule-heat-rust/src/test.csv"
