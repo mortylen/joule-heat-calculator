@@ -73,16 +73,16 @@ The main setting file looks like this:
 
 *app_setting.toml*
 ```toml
-# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.toml"
   
-# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.toml"
   
-# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.toml"
 
-# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
 
 # Set sample surface area [mm^2]
@@ -103,7 +103,7 @@ pulse_duration = 1000
 # Set number of iterations
 num_of_iterations = 1000
 
-# Set export directory path
+# Set export file path
 export_path = "/home/runner/joule-heat-rust/src/tets.csv"
 ```
 
@@ -163,7 +163,7 @@ Or run the application without the parameter and the application prompts you for
 
 ![console](https://github.com/mortylen/joule-heat/blob/main/img/settingfile.png?raw=true)
 
-The calculated data are saved to the file defined in the export_path parameter in the configuration. The data is saved in CSV format.
+The calculated data are saved to the file defined in the ***export_path*** parameter in the configuration. The data is saved in ***CSV*** format.
 
 ### Manual
 For detailed instructions see the file ***[MANUAL.md](https://github.com/mortylen/joule-heat/blob/main/docs/MANUAL.md)*** or ***MANUAL.txt*** in the ***docs*** folder for the latest release version.

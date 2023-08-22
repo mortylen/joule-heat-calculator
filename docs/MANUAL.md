@@ -15,7 +15,7 @@ joule-heat-calculator.exe app_setting.toml
   
 Or run the application without the parameter and the application prompts you for the path to the settings file. 
 
-The calculated data are saved to the file defined in the export_path parameter in the configuration. The data is saved in CSV format.
+The calculated data are saved to the file defined in the ***export_path*** parameter in the configuration. The data is saved in ***CSV*** format.
 
 ### Note 
 Prior to execution, please review the ***app_setting.toml*** file or your designated settings file, and ensure that all file paths are configured in alignment with the current directory. Additionally, adjust all parameters within the file to suit your specific requirements. It's important not to overlook the customization of values within all related tables according to your specific needs.
@@ -57,7 +57,7 @@ pulse_duration = 1000
 # Set number of iterations 
 num_of_iterations = 1000 
   
-# Set export directory path 
+# Set export file path [*.csv]
 export_path = "/home/runner/joule-heat-rust/src/tets.csv" 
 ``` 
   
