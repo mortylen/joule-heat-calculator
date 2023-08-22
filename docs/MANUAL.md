@@ -10,10 +10,12 @@ You must have Rust installed to run the application. See [Install Rust](https://
 Run the application with a parameter that contains the path to the settings file (by default it is ***app_setting.toml***). 
   
 ```bash
-    joule-heat-calculator.exe app_setting.toml 
+joule-heat-calculator.exe app_setting.toml 
 ``` 
   
 Or run the application without the parameter and the application prompts you for the path to the settings file. 
+
+The calculated data are saved to the file defined in the export_path parameter in the configuration. The data is saved in CSV format.
 
 ### Note 
 Prior to execution, please review the ***app_setting.toml*** file or your designated settings file, and ensure that all file paths are configured in alignment with the current directory. Additionally, adjust all parameters within the file to suit your specific requirements. It's important not to overlook the customization of values within all related tables according to your specific needs.
@@ -25,17 +27,17 @@ The main setting file looks like this:
   
 *app_setting.toml* 
 ```toml 
-# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file 
-resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.toml" 
+# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or as CSV file 
+resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.csv" 
   
-# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or csv file 
-specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.toml" 
+# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or as CSV file 
+specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.csv" 
   
-# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or csv file 
-heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.toml" 
+# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or as CSV file 
+heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.csv" 
   
-# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or csv file 
-current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml" 
+# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or as CSV file 
+current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.csv" 
   
 # Set sample surface area [mm^2] 
 surface_area = 70.591586 

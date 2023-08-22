@@ -163,6 +163,8 @@ Or run the application without the parameter and the application prompts you for
 
 ![console](https://github.com/mortylen/joule-heat/blob/main/img/settingfile.png?raw=true)
 
+The calculated data are saved to the file defined in the export_path parameter in the configuration. The data is saved in CSV format.
+
 ### Manual
 For detailed instructions see the file ***[MANUAL.md](https://github.com/mortylen/joule-heat/blob/main/docs/MANUAL.md)*** or ***MANUAL.txt*** in the ***docs*** folder for the latest release version.
 
