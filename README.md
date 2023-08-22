@@ -11,8 +11,8 @@
 **[Donate](https://mortylen.hashnode.dev/contact)**
 
 * [Title](#Joule-Heat-Calculator)
-* [Introduction](#Introduction)
 * [Project Layout](#Project-Layout)
+* [Introduction](#Introduction)
 * [Mathematics](#Mathematics-I-have-to-explain-this-a-little-bit)
 * [Configuration files](#Create-configuration-files)
 * [How to run it?](#How-to-run-it)
