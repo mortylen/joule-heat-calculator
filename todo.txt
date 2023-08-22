@@ -6,8 +6,8 @@
 - message after complete, not close app     done
 - error handling
 - rename fn set_application to set_config_path done
-- write manual
+- write manual                              done
 - complie for win and linux
 - rename repository
 - change name in LICENSE
-- add message "in progress..."
+- add message "in progress..."              done

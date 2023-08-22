@@ -155,6 +155,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
 
     //Run calculation
+    println!("Calculation in progress...");
     let calculated_data: Vec<ExportData> = match get_calculated_data(&config) {
         Ok(data) => {
             data
