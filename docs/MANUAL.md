@@ -1,16 +1,31 @@
-# Joule Heat Calculator V 0.1.0
+# Joule Heat Calculator v0.1.0
 
 ## How to run it? 
 Download the latest Release and extract it to your local computer. 
   
 ### Requirements 
-You must have Rust installed to run the application. See [Install Rust](https://rust-lang.org/tools/install) 
+To compile the source code on your system, you must have Rust installed to run the application. See [Install Rust](https://rust-lang.org/tools/install) 
   
 ### Instructions 
 Run the application with a parameter that contains the path to the settings file (by default it is ***app_setting.toml***). 
-  
+
+*Windows:*
 ```bash
-joule-heat-calculator.exe app_setting.toml 
+joule_heat_calculator.exe app_setting.toml 
+```
+
+*Linux:*
+```bash
+joule_heat_calculator app_setting.toml 
+```
+*or:*
+```bash
+./joule_heat_calculator app_setting.toml 
+```
+*or, if you don't have permission:*
+```bash
+sudo chmod +x ./joule_heat_calculator
+joule_heat_calculator ./app_setting.toml 
 ``` 
   
 Or run the application without the parameter and the application prompts you for the path to the settings file. 
