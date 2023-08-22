@@ -8,6 +8,6 @@
 - rename fn set_application to set_config_path done
 - write manual                              done
 - complie for win and linux
-- rename repository
-- change name in LICENSE
+- rename repository                         done
+- change name in LICENSE                    done
 - add message "in progress..."              done
