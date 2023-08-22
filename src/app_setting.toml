@@ -1,13 +1,13 @@
-# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set resistance table [toml] file path 'resistance_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 resistance_tbl_path = "/home/runner/joule-heat-rust/src/setting/resistance_tbl.csv"
   
-# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set specific heat table [toml] file path 'specific_heat_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 specific_heat_tbl_path = "/home/runner/joule-heat-rust/src/setting/specific_heat_tbl.csv"
   
-# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set heat transfer table [toml] file path 'heat_transfer_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 heat_transfer_tbl_path = "/home/runner/joule-heat-rust/src/setting/heat_transfer_tbl.csv"
 
-# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or csv file
+# Set current table [toml] file path 'current_tbl = [{index = 0.0, value=0.0}]' or as CSV file
 #current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.toml"
 current_tbl_path = "/home/runner/joule-heat-rust/src/setting/current_tbl.csv"
 
@@ -29,5 +29,5 @@ pulse_duration = 1000
 # Set number of iterations
 num_of_iterations = 10000
 
-# Set export directory path
+# Set export file path
 export_path = "/home/runner/joule-heat-rust/src/test.csv"
