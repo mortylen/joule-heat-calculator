@@ -4,7 +4,7 @@
 
 ## Joule Heating Calculation and Cooling via Heat Transfer in Wire.
 
-**[PROJECT ARTICLE](https://mortylen.hashnode.dev)**
+**[PROJECT ARTICLE](https://mortylen.hashnode.dev/joule-heat-calculator)**
 **|**
 **[LICENSE](https://github.com/mortylen/joule-heat/blob/main/LICENSE)**
 **|**
