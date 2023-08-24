@@ -184,7 +184,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 fn read_config_file(config_path: &str) -> Result<String, io::Error> {
     match fs::read_to_string(&config_path) {
         Ok(file_content) => Ok(file_content),
-        Err(error) => Err(error),
+        Err(error) => Err(io::Error::new(
+            error.kind(),
+            format!("Error reading file '{}': {}", config_path, error),
+        )),
     }
 }
 
